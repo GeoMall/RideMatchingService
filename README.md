@@ -61,7 +61,7 @@ The in-memory H2 database console is available at:
 
 | Field    | Value                  |
 |----------|------------------------|
-| JDBC URL | `jdbc:h2:mem:driversdb`|
+| JDBC URL | `jdbc:h2:mem:RideMatchingDb`|
 | Username | `sa`                   |
 | Password | *(leave blank)*        |
 
