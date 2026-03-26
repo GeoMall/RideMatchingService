@@ -2,6 +2,7 @@ package com.example.RideMatchingService.controller;
 
 import com.example.RideMatchingService.dto.driver.DriverDTO;
 import com.example.RideMatchingService.model.Driver;
+import com.example.RideMatchingService.model.DriverLocationRequest;
 import com.example.RideMatchingService.service.DriverService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class DriverController
     private DriverService driverService;
 
     @PostMapping("/register")
-    public ResponseEntity<Driver> register(@RequestBody DriverDTO request) {
+    public ResponseEntity<DriverDTO> register(@Valid @RequestBody DriverDTO request) {
         Driver driver = driverService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(driver);
     }
@@ -32,22 +33,22 @@ public class DriverController
     }
 
     @GetMapping
-    public ResponseEntity<List<Driver>> getAllDrivers() {
+    public ResponseEntity<List<DriverDTO>> getAllDrivers() {
         return ResponseEntity.ok(driverService.getAllDrivers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Driver> getDriverById(@PathVariable Long id) {
+    public ResponseEntity<DriverDTO> getDriverById(@PathVariable Long id) {
         return ResponseEntity.ok(driverService.getDriverById(id));
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<Driver>> getAvailableDrivers() {
+    public ResponseEntity<List<DriverDTO>> getAvailableDrivers() {
         return ResponseEntity.ok(driverService.getAvailableDrivers());
     }
 
     @PostMapping("/nearest")
-    public ResponseEntity<List<Driver>> getNearestDrivers(@RequestBody DriverDTO request) {
+    public ResponseEntity<List<DriverDTO>> getNearestDrivers(@RequestBody DriverLocationRequest request) {
         return ResponseEntity.ok(driverService.getNearestAvailableDrivers(request.getLatitude(), request.getLongitude()));
     }
 }

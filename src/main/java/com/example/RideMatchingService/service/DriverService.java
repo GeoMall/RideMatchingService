@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @Service
 public class DriverService
 {
@@ -53,10 +52,12 @@ public class DriverService
                 .orElseThrow(() -> new RuntimeException("Driver not found with id: " + id));
     }
 
+    @Transactional(readOnly = true)
     public List<Driver> getAvailableDrivers() {
         return repository.findByIsAvailable(true);
     }
 
+    @Transactional(readOnly = true)
     public List<Driver> getNearestAvailableDrivers(double pickupLat, double pickupLon){
         var availableDrivers = getAvailableDrivers();
 
