@@ -11,7 +11,7 @@ Make sure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/RideMatchingService.git
+git clone https://github.com/GeoMall/RideMatchingService.git
 cd RideMatchingService
 ```
 
