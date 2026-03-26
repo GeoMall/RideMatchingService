@@ -33,7 +33,7 @@ public class Ride {
 
     @CreationTimestamp
     private LocalDateTime requestedAt;
-    
+
     @Version
     private Long version;
 }

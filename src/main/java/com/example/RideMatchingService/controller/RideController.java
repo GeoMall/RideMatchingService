@@ -32,12 +32,12 @@ public class RideController
     }
 
     @GetMapping
-    public ResponseEntity<List<Ride>> getAllRides() {
+    public ResponseEntity<List<RideResponseDTO>> getAllRides() {
         return ResponseEntity.ok(rideService.getAllRides());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ride> getRideById(@PathVariable Long id) {
+    public ResponseEntity<RideResponseDTO> getRideById(@PathVariable Long id) {
         return ResponseEntity.ok(rideService.getRideById(id));
     }
 }

@@ -59,12 +59,12 @@ class RideControllerTest {
 
     @Test
     void shouldReturnAllRides() {
-        Ride ride = new Ride();
-        ride.setId(1L);
+        RideResponseDTO ride = new RideResponseDTO();
+        ride.setRideId(1L);
 
         when(rideService.getAllRides()).thenReturn(List.of(ride));
 
-        ResponseEntity<List<Ride>> response = rideController.getAllRides();
+        ResponseEntity<List<RideResponseDTO>> response = rideController.getAllRides();
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).containsExactly(ride);

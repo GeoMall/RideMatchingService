@@ -1,8 +1,10 @@
 package com.example.RideMatchingService;
 
 import com.example.RideMatchingService.controller.DriverController;
+import com.example.RideMatchingService.dto.driver.DriverCreateDTO;
 import com.example.RideMatchingService.dto.driver.DriverDTO;
-import com.example.RideMatchingService.model.Driver;
+import com.example.RideMatchingService.dto.driver.DriverRequestDTO;
+import com.example.RideMatchingService.model.DriverLocationRequest;
 import com.example.RideMatchingService.service.DriverService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,13 +32,13 @@ class DriverControllerTest {
 
     @Test
     void shouldRegisterDriver() {
-        DriverDTO dto = new DriverDTO();
+        DriverCreateDTO dto = new DriverCreateDTO();
         dto.setName("John");
         dto.setAvailable(true);
         dto.setLatitude(100.0000000);
         dto.setLongitude(111.0000000);
 
-        Driver savedDriver = new Driver();
+        DriverDTO savedDriver = new DriverDTO();
         savedDriver.setId(1L);
         savedDriver.setName("John");
         savedDriver.setAvailable(true);
@@ -45,7 +47,7 @@ class DriverControllerTest {
 
         when(driverService.register(dto)).thenReturn(savedDriver);
 
-        ResponseEntity<Driver> response = driverController.register(dto);
+        ResponseEntity<DriverDTO> response = driverController.register(dto);
 
         assertThat(response.getStatusCode().value()).isEqualTo(201);
         assertThat(response.getBody()).isEqualTo(savedDriver);
@@ -54,7 +56,7 @@ class DriverControllerTest {
 
     @Test
     void shouldReturnAvailableDrivers() {
-        Driver d = new Driver();
+        DriverDTO d = new DriverDTO();
         d.setId(1L);
         d.setAvailable(true);
         d.setLatitude(100.0000000);
@@ -62,7 +64,7 @@ class DriverControllerTest {
 
         when(driverService.getAvailableDrivers()).thenReturn(List.of(d));
 
-        ResponseEntity<List<Driver>> response = driverController.getAvailableDrivers();
+        ResponseEntity<List<DriverDTO>> response = driverController.getAvailableDrivers();
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).containsExactly(d);
@@ -71,13 +73,13 @@ class DriverControllerTest {
 
     @Test
     void shouldReturnNearestDrivers() {
-        Driver driver1 = new Driver();
+        DriverDTO driver1 = new DriverDTO();
         driver1.setId(1L);
         driver1.setAvailable(true);
         driver1.setLatitude(36.033894540487395);
         driver1.setLongitude(14.314302345741163);
 
-        Driver driver2 = new Driver();
+        DriverDTO driver2 = new DriverDTO();
         driver2.setId(2L);
         driver2.setAvailable(true);
         driver2.setLatitude(36.035319024327464);
@@ -85,14 +87,14 @@ class DriverControllerTest {
 
         when(driverService.getNearestAvailableDrivers(anyDouble(), anyDouble())).thenReturn(List.of(driver1, driver2));
 
-        DriverDTO dto = new DriverDTO();
+        DriverLocationRequest dto = new DriverLocationRequest();
         dto.setLatitude(36.035319024327464);
         dto.setLongitude(14.311347850522173);
 
-        ResponseEntity<List<Driver>> response = driverController.getNearestDrivers(dto);
+        ResponseEntity<List<DriverDTO>> response = driverController.getNearestDrivers(dto);
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody()).extracting(Driver::getId).containsExactlyInAnyOrder( 2L, 1L);
+        assertThat(response.getBody()).extracting(DriverDTO::getId).containsExactlyInAnyOrder( 2L, 1L);
         verify(driverService, times(1)).getNearestAvailableDrivers(anyDouble(), anyDouble());
     }
 
@@ -100,7 +102,7 @@ class DriverControllerTest {
     void shouldReturnEmptyListWhenNoDrivers() {
         when(driverService.getAvailableDrivers()).thenReturn(List.of());
 
-        ResponseEntity<List<Driver>> response = driverController.getAvailableDrivers();
+        ResponseEntity<List<DriverDTO>> response = driverController.getAvailableDrivers();
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).isEmpty();
@@ -109,12 +111,12 @@ class DriverControllerTest {
 
     @Test
     void shouldReturnUpdatedDrivers() {
-        DriverDTO dto = new DriverDTO();
+        DriverRequestDTO dto = new DriverRequestDTO();
         dto.setAvailable(false);
         dto.setLatitude(1.0000000);
         dto.setLongitude(11.0000000);
 
-        Driver savedDriver = new Driver();
+        DriverDTO savedDriver = new DriverDTO();
         savedDriver.setId(1L);
         savedDriver.setName("John");
         savedDriver.setAvailable(false);
@@ -123,7 +125,7 @@ class DriverControllerTest {
 
         when(driverService.update(1L, dto)).thenReturn(savedDriver);
 
-        ResponseEntity<Driver> response = driverController.update(1L, dto);
+        ResponseEntity<DriverDTO> response = driverController.update(1L, dto);
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(savedDriver);

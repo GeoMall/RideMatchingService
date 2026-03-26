@@ -1,5 +1,6 @@
 package com.example.RideMatchingService.service;
 
+import com.example.RideMatchingService.dto.driver.DriverDTO;
 import com.example.RideMatchingService.dto.ride.RideRequestDTO;
 import com.example.RideMatchingService.dto.ride.RideResponseDTO;
 import com.example.RideMatchingService.model.Driver;
@@ -27,8 +28,11 @@ public class RideService
     @Autowired
     private DistanceService distanceService;
 
-    public List<Ride> getAllRides() {
-        return rideRepository.findAll();
+    public List<RideResponseDTO> getAllRides() {
+       return rideRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
     @Transactional
@@ -64,7 +68,8 @@ public class RideService
 
     @Transactional
     public RideResponseDTO completeRide(Long rideId) {
-        var ride = getRideById(rideId);
+        var ride = rideRepository.findById(rideId)
+                .orElseThrow(() -> new RuntimeException("Ride not found with id: " + rideId));
 
         if (ride.getStatus() != RideStatus.ASSIGNED) {
             throw new RuntimeException("Ride cannot be completed. Current status: " + ride.getStatus());
@@ -80,9 +85,11 @@ public class RideService
         return buildResponse(ride, driver, "Ride completed successfully. Driver is now available.");
     }
 
-    public Ride getRideById(Long id) {
-        return rideRepository.findById(id)
+    public RideResponseDTO getRideById(Long id) {
+        Ride ride = rideRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ride not found with id: " + id));
+
+        return mapToDTO(ride);
     }
 
     private RideResponseDTO buildResponse(Ride ride, Driver driver, String message) {
@@ -102,5 +109,22 @@ public class RideService
         }
 
         return response;
+    }
+
+    private RideResponseDTO mapToDTO(Ride ride) {
+        RideResponseDTO dto = new RideResponseDTO();
+        dto.setRideId(ride.getId());
+        dto.setRiderName(ride.getRiderName());
+        dto.setPickupLatitude(ride.getPickupLatitude());
+        dto.setPickupLongitude(ride.getPickupLongitude());
+        dto.setStatus(ride.getStatus());
+
+        var driver = ride.getDriver();
+        dto.setDriverId(driver.getId());
+        dto.setDriverName(driver.getName());
+        dto.setDriverLatitude(driver.getLatitude());
+        dto.setDriverLongitude(driver.getLongitude());
+
+        return dto;
     }
 }

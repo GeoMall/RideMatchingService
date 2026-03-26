@@ -8,9 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DriverDTO
-{
-    private Long id;
+public class DriverCreateDTO {
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -23,4 +21,3 @@ public class DriverDTO
     @Min(-180) @Max(180)
     private double longitude;
 }
-

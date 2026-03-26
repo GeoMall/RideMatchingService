@@ -1,7 +1,8 @@
 package com.example.RideMatchingService.controller;
 
+import com.example.RideMatchingService.dto.driver.DriverCreateDTO;
 import com.example.RideMatchingService.dto.driver.DriverDTO;
-import com.example.RideMatchingService.model.Driver;
+import com.example.RideMatchingService.dto.driver.DriverRequestDTO;
 import com.example.RideMatchingService.model.DriverLocationRequest;
 import com.example.RideMatchingService.service.DriverService;
 import jakarta.validation.Valid;
@@ -19,16 +20,16 @@ public class DriverController
     private DriverService driverService;
 
     @PostMapping("/register")
-    public ResponseEntity<DriverDTO> register(@Valid @RequestBody DriverDTO request) {
-        Driver driver = driverService.register(request);
+    public ResponseEntity<DriverDTO> register(@Valid @RequestBody DriverCreateDTO request) {
+        DriverDTO driver = driverService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(driver);
     }
 
     @PutMapping("/{driverId}")
-    public ResponseEntity<Driver> update(
+    public ResponseEntity<DriverDTO> update(
             @PathVariable Long driverId,
-            @Valid @RequestBody DriverDTO request) {
-        Driver updated = driverService.update(driverId, request);
+            @Valid @RequestBody DriverRequestDTO request) {
+        DriverDTO updated = driverService.update(driverId, request);
         return ResponseEntity.ok(updated);
     }
 

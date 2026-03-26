@@ -2,19 +2,15 @@ package com.example.RideMatchingService.dto.driver;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class DriverDTO
+public class DriverRequestDTO
 {
-    private Long id;
-
-    @NotBlank(message = "Name is required")
-    private String name;
-
+    @NotNull
     private boolean isAvailable;
 
     @Min(-90) @Max(90)
@@ -23,4 +19,3 @@ public class DriverDTO
     @Min(-180) @Max(180)
     private double longitude;
 }
-
