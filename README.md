@@ -89,22 +89,37 @@ curl -X GET http://localhost:8080/api/drivers
 curl -X GET http://localhost:8080/api/drivers/available
 ```
 
-### 4. Request a Ride
+### 4. Get Driver By ID
+```bash
+curl -X GET http://localhost:8080/api/drivers/1
+```
+
+### 5. Get Nearest Drivers
+```bash
+curl -X POST http://localhost:8080/api/drivers/nearest -H "Content-Type: application/json" -d "{\"latitude\": 35.9042, \"longitude\": 14.5189}"
+```
+
+### 6. Update Driver
+```bash
+curl -X PUT http://localhost:8080/api/drivers/1 -H "Content-Type: application/json" -d "{ \"latitude\": 35.9042, \"longitude\": 14.5189, \"available\": false}
+```
+
+### 7. Request a Ride
 ```bash
 curl -X POST http://localhost:8080/api/rides/request -H "Content-Type: application/json" -d "{\"riderName\": \"Alice\", \"pickupLatitude\": 35.9042, \"pickupLongitude\": 14.5189}"
 ```
 
-### 5. Get All Rides
+### 8. Get All Rides
 ```bash
 curl -X GET http://localhost:8080/api/rides
 ```
 
-### 6. Get Ride by ID
+### 9. Get Ride by ID
 ```bash
 curl -X GET http://localhost:8080/api/rides/1
 ```
 
-### 7. Complete a Ride
+### 10. Complete a Ride
 ```bash
 curl -X PATCH http://localhost:8080/api/rides/1/complete
 ```
@@ -119,7 +134,9 @@ src/main/java/com/example/RideMatchingService/
 │   └── RideController.java
 ├── dto/
 │   ├── driver/
+│   │   └── DriverCreateDTO.java
 │   │   └── DriverDTO.java
+│   │   └── DriverRequestDTO.java
 │   ├── ride/
 │   │   ├── RideRequestDTO.java
 │   │   └── RideResponseDTO.java
@@ -128,8 +145,9 @@ src/main/java/com/example/RideMatchingService/
 │   └── GlobalExceptionHandler.java
 ├── model/
 │   ├── Driver.java
+│   ├── DriverLocationRequest.java
 │   ├── Ride.java
-│   └── RideStatus.java  (enum)
+│   └── RideStatus.java
 ├── repository/
 │   ├── DriverRepository.java
 │   └── RideRepository.java
