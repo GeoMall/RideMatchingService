@@ -34,7 +34,7 @@ public class RideService
     @Transactional
     public RideResponseDTO requestRide(RideRequestDTO dto) {
 
-        List<Driver> availableDrivers = driverRepository.findAvailableDriversWithLock();
+        List<Driver> availableDrivers = driverRepository.findByIsAvailable(true);
 
         Ride ride = new Ride();
         ride.setRiderName(dto.getRiderName());

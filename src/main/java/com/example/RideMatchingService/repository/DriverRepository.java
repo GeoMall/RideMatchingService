@@ -12,9 +12,6 @@ import java.util.List;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long>
 {
-    List<Driver> findByIsAvailable(boolean isAvailable);
-
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT d FROM Driver d WHERE d.available = true")
-    List<Driver> findAvailableDriversWithLock();
+    List<Driver> findByIsAvailable(boolean isAvailable);
 }
